@@ -28,12 +28,6 @@ parser.add_argument('-n',
                     help='The number of input Tokens',
                     type=int)
 
-parser.add_argument('-k',
-                    '--numKmers',
-                    help="""The of mers in the k-mers, for example, 
-                    1 for 1-mer and 3 for 3-mers input sequence""",
-                    type=int)
-
 parser.add_argument('-d',
                     '--embDim',
                     help='The output of the embedding dimension',
@@ -73,7 +67,6 @@ trainEmbedding=inputs.trainEmbedding
 gpuIndex=inputs.gpuIndex
 outputPath=inputs.outputPath
 dataFrac=inputs.dataFrac
-kmers=inputs.numKmers
 # validating the user inputs
 assert numTokens >=21, """ The number of unique tokens should be at least 21,
                             that is 20 amino acids + 1 """
@@ -95,25 +88,24 @@ trainEmbedding=bool(trainEmbedding)
 os.environ["CUDA_VISIBLE_DEVICES"]=str(gpuIndex)
 for gpu in tf.config.experimental.get_visible_devices()[1:]:
     tf.config.experimental.set_memory_growth(gpu,True)
-## Read the data based upon the number of tokens
-if kmers==1: 
-    with open("OneKmerArrayOneTrainEqual.pickle","rb") as output_:
-        firstProteinArrayTrain=pickle.load(output_)
+## Read the data 
+with open("OneKmerArrayOneTrainEqual.pickle","rb") as output_:
+    firstProteinArrayTrain=pickle.load(output_)
 
-    with open("OneKmerArrayTwoTrainEqual.pickle","rb") as output_:
-        secondProteinArrayTrain=pickle.load(output_)
+with open("OneKmerArrayTwoTrainEqual.pickle","rb") as output_:
+    secondProteinArrayTrain=pickle.load(output_)
     
-    with open("OneKmerArrayThreeTrainEqual.pickle","rb") as output_:
-        thirdProteinsListTrain=pickle.load(output_)
+with open("OneKmerArrayThreeTrainEqual.pickle","rb") as output_:
+    thirdProteinsListTrain=pickle.load(output_)
 
-    with open("OneKmerArrayOneTestEqual.pickle","rb") as output_:
-        firstProteinArrayTest=pickle.load(output_)
+with open("OneKmerArrayOneTestEqual.pickle","rb") as output_:
+    firstProteinArrayTest=pickle.load(output_)
 
-    with open("OneKmerArrayTwoTestEqual.pickle","rb") as output_:
-        secondProteinArrayTest=pickle.load(output_)
+with open("OneKmerArrayTwoTestEqual.pickle","rb") as output_:
+    secondProteinArrayTest=pickle.load(output_)
 
-    with open("OneKmerArrayThreeTestEqual.pickle","rb") as output_:
-        thirdProteinsListTest=pickle.load(output_)
+with open("OneKmerArrayThreeTestEqual.pickle","rb") as output_:
+    thirdProteinsListTest=pickle.load(output_)
 # define a model for training the data:
 model=DPPIModel(numTokens,embDim,trainEmbedding)
 ## construct evaluation metrics for training and Test datasets: 
