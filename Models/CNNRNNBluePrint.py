@@ -11,8 +11,10 @@
          uses embeeding is defined and constructed using `buildHlaCNN_RNNModel` while the second function
          which does not use embedding and depend upon one-hot encoding is defined and constructed using 
          `buildHlaCNN_RNNModelOneHot`. Both models have the following basic architecture
-         inputTensor ==> ConvLayer ==> LSTM ==> output neuron ==> PredictionHead
+         inputTensor ==> Embedding layer* ==> ConvLayer ==> LSTM ==> output neuron ==> PredictionHead
          
+        *this layer is skipped, in case, one-hot encoding is used.
+          
 @note The models are constructed using the Keras functional API, and hence can be trained with `.fit` method.
 """
 # load the module
