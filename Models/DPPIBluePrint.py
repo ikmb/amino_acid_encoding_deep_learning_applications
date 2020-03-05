@@ -203,8 +203,8 @@ class DPPIModel(tf.keras.models.Model):
     def call(self,inputTensorA,inputTensorB,training):
         """
         @brief The feed-forward logic of the network
-        @param inputTensorA: tensor, the numerically encoded tensor for the first protein.
-        @param inputTensorB: tensor, the numerically encoded tensor for the second protein.
+        @param inputTensorA: tensor, a rank 2 tensor that contain the numerically encoded tensor for the first protein.
+        @param inputTensorB: tensor, a rank 2 tensor that contain the numerically encoded tensor for the second protein.
         """
         proteinA=self.embedding(inputTensorA)
         proteinB=self.embedding(inputTensorB)
