@@ -92,7 +92,6 @@ def dynamicAUC(y_true,y_pred,threshold=0.426):
     @param y_true: tensor, a rank one tensor, which is the experimentally measured values.
     @param y_pred: tensor, a rank one tensor, the predicted affinity of the model. 
     @param threshold: scaler, a float, threshold for binarization. 
-    
     """
     casetedLabels=tf.cast(y_true>=0.426,tf.int32)
     return tf.py_function(roc_auc_score, (casetedLabels, y_pred), 
