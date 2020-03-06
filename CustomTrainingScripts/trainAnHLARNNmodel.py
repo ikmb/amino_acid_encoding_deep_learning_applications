@@ -6,7 +6,6 @@
 @contact h.elabd@ikmb.uni-kiel.de
 @brief A command-line script for constructing and training an LSTM based peptide-HLA-II interaction model        
 @see RNNBluePrint.py  
-@note: The model uses VHSE8 Matrix to encode the provided amino acids
 """
 # load the modules:
 import tensorflow as tf
