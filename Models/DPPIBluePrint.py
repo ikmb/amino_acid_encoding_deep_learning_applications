@@ -146,8 +146,8 @@ class DPPIModel(tf.keras.models.Model):
     
     @details The model is implemented as linear stack of two subnetworks, 
     the first a convolutional modules, defined above and the second is a
-    a random project module which is simple, one layer feed-forward neural network. 
-    Thus, the model is cabe represented as follow:
+    a random project module which is a one layer feed-forward neural network. 
+    Thus, the model is can be represented as follow:
     inputTensorA--|                                       |--RandProjectionA-->|
                   | ==> Embedding Layer* ==>ConvModule ==>|                    |==>Multiply==> OutputNeuron ==> interaction probability
     inputTensorB--|                                       |--RandProjectionB-->|
@@ -203,13 +203,69 @@ class DPPIModel(tf.keras.models.Model):
     def call(self,inputTensorA,inputTensorB,training):
         """
         @brief The feed-forward logic of the network
-        @param inputTensorA: tensor, a rank 2 tensor that contain the numerically encoded tensor for the first protein.
-        @param inputTensorB: tensor, a rank 2 tensor that contain the numerically encoded tensor for the second protein.
+        @param inputTensorA: tensor, the numerically encoded tensor for the first protein.
+        @param inputTensorB: tensor, the numerically encoded tensor for the second protein.
         """
         proteinA=self.embedding(inputTensorA)
         proteinB=self.embedding(inputTensorB)
         proteinA=self.convModule(proteinA,training)
         proteinB=self.convModule(proteinB,training)
+        proteinA=self.randomProjectOne(proteinA)
+        proteinB=self.randomProjectTwo(proteinB)
+        proteinAMultproteinB=tf.multiply(proteinA,proteinB)
+        return self.outputUnit(proteinAMultproteinB)
+#define a model that does not use embeeding and uses one-hot encoding: 
+# define the model: 
+class DPPIModelOneHot(tf.keras.models.Model):
+    """
+    @brief The implementation of the DPPI model with one hot encoding
+    
+    @details The model is implemented as linear stack of two subnetworks, 
+    the first a convolutional modules, defined above and the second is a
+    a random project module which is a one layer feed-forward neural network. 
+    Thus, the model is can be represented as follow:
+    inputTensorA--|                  |--RandProjectionA-->|
+                  | ==>ConvModule ==>|                    |==>Multiply==> OutputNeuron ==> interaction probability
+    inputTensorB--|                  |--RandProjectionB-->|
+    
+    @note Multiply  two element-wise multiplication
+    @note The inputs to conv modules are processed sequentially in the same feed-forward pass.  
+    """
+    def __init__(self,**kawgs):
+        """
+        @brief build the model using the user-defined parameters.
+        @param **kwargs:  parameters being forwarded to the bass class. 
+        @note Embedding is not needed as the input tensors are provided in one-encoded fashion 
+        """
+        super(DPPIModelOneHot,self).__init__()
+           
+        self.convModule=ConvModule(name="ConvolutionModule") 
+           
+        self.randomProjectOne=tf.keras.layers.Dense(
+                              units=512,activation='relu',use_bias=False,
+                              trainable=False,name="RandomProjectionOne")    
+        
+        self.randomProjectTwo=tf.keras.layers.Dense(
+                              units=512,activation='relu',use_bias=False,
+                              trainable=False,name="RandomProjectionTwo")
+        
+        self.outputUnit=tf.keras.layers.Dense(units=1, activation="sigmoid",
+                                              name="OutPutUnits")
+    @tf.function
+    def call(self,inputTensorA,inputTensorB,training):
+        """
+        @brief The feed-forward logic of the network
+        @param inputTensorA: tensor, rank 3, the numerically encoded tensor for the first protein.
+        @param inputTensorB: tensor, rank 3, the numerically encoded tensor for the second protein.
+        """
+        assert len(inputTensorA.shape)==3, """ Both of Your input tensors 
+        should be a rank 3 tenosr however, your input tensor has a rank {}
+        """.format(len(inputTensorA.shape))
+        assert len(inputTensorB.shape)==3, """ Both of Your input tensors 
+        should be a rank 3 tenosr however, your input tensor has a rank {}
+        """.format(len(inputTensorB.shape))
+        proteinA=self.convModule(inputTensorA,training)
+        proteinB=self.convModule(inputTensorB,training)
         proteinA=self.randomProjectOne(proteinA)
         proteinB=self.randomProjectTwo(proteinB)
         proteinAMultproteinB=tf.multiply(proteinA,proteinB)
