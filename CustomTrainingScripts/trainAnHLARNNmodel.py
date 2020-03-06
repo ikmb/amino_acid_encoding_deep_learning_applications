@@ -4,14 +4,8 @@
 @author Hesham ElAbd
 @group Genetics and Bioinformatics group, IKMB, University of Kiel, Germany
 @contact h.elabd@ikmb.uni-kiel.de
-
-@brief A command-line script for constructing and training a DPPI model @see DPPIBluePrint.py
-  
-@details Constructing a DPPI models with a user defined parameters, train it on a specific fraction of input data 
-        using a specific GPU and then write the results dict as pickle object on a user defined object.
-        The loss, metrics and model checkpoints are written a log directory which enable live monitoring of 
-        the training using TensorBoard. 
-        
+@brief A command-line script for constructing and training an LSTM based peptide-HLA-II interaction model        
+@see RNNBluePrint.py  
 @note: The model uses VHSE8 Matrix to encode the provided amino acids
 """
 # load the modules:
