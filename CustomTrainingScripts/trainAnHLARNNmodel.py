@@ -12,7 +12,7 @@ import tensorflow as tf
 import numpy as np 
 import pandas as pd
 import pickle 
-from RNNBluePrint import buildHlaCNN_RNNModel
+from RNNBluePrint import buildHlaRNNModel
 import argparse
 import os
 import time
