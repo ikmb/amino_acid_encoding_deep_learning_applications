@@ -1,0 +1,2 @@
+The training and test ready tensors can be downoaded from the following link 
+https://order.ikmb.uni-kiel.de/media/PPI_Data.zip 
