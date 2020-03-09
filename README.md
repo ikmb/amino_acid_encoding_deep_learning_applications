@@ -12,3 +12,6 @@ the above commandline would create a DPPI model using the blueprint defined at M
 ```
 $python trainDPPIModel.py -n 21 -d 8 -t 0 -g 0 -f 0.75 -o results/example_one
 ``` 
+## Funding 
+the project was funded by the German Research Foundation (DFG) (Research Training Group 1743, ‘Genes, Environment and Inflammation’) and 
+by NASA Astrobiology Institute. 
